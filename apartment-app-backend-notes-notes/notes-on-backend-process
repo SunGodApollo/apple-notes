@@ -1,0 +1,100 @@
+# Authorization vs Authentication intro
+- authentication allows you to log in, it establishes that you are who you say you are.
+- authorization is verifying if you are authorized to access a resource, and does it after you have been authenticated
+
+# create backend rails
+
+create app - 
+ rails new app-name -d postgresql -T
+ rails db:create
+ bundle add rspec-rails
+ rails generate rspec:install
+
+
+# install Devise
+
+ bundle add devise
+ rails generate devise:install
+ rails generate devise User
+ rails db:migrate
+
+# generate rails resource (a model with all the needed stuff like routes, views)
+ - rails g resource Apartment street:string unit:string city:string state:string square_footage:integer price:string bedrooms:integer bathrooms:float pets:string image:text user_id:integer
+- added foreign key because user will have many apartments
+
+
+# Set up relationships
+
+
+- app/models/user.rb
+    has_many :apartments
+
+- app/models/apartment.rb
+    belongs_to :user
+
+
+
+# Set up seeds
+```ruby
+user1 = User.where(email: "testing1@example.com").first_or_create(password: "password", password_confirmation: "password")
+
+user2 = User.where(email: "testing2@example.com").first_or_create(password: "password", password_confirmation: "password")
+# seeds for users
+
+apartments1 = [
+    {
+        street: '45 Rimrock',
+        unit: '90',
+        city: 'Dallas',
+        state: 'TX',
+        square_footage: 1000,
+        price: '1800',
+        bedrooms: 2, 
+        bathrooms: 2,
+        pets: 'yes',
+        image: 'https://images.unsplash.com/photo-1605283176568-9b41fde3672e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YXBhcnRtZW50c3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=400&q=60'
+    },
+    {
+        street: '345 Lightwave',
+        unit: '3',
+        city: 'Boulder',
+        state: 'CO',
+        square_footage: 1000,
+        price: '1800',
+        bedrooms: 2, 
+        bathrooms: 2,
+        pets: 'yes',
+        image: 'https://images.unsplash.com/photo-1574362848149-11496d93a7c7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8YXBhcnRtZW50c3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=400&q=60'
+    }
+]
+
+apartments2 = [
+    {
+        street: '4550 Kamehameha',
+        unit: '6',
+        city: 'Honolulu',
+        state: 'HI',
+        square_footage: 1000,
+        price: '4000',
+        bedrooms: 2, 
+        bathrooms: 2,
+        pets: 'yes',
+        image: 'https://images.unsplash.com/photo-1605283176568-9b41fde3672e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YXBhcnRtZW50c3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=400&q=60'
+    }
+]
+# seeds for apartments for each user
+
+apartments1.each do |apartment|
+    user1.apartments.create(apartment)
+    put "creating: #{apartment}"
+end
+
+apartments2.each do |apartment|
+    user2.apartments.create(apartment)
+    put "creating: #{apartment}"
+end
+```
+# run rails db:seed
+
+
+# add to remote repo
